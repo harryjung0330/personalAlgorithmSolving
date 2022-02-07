@@ -4,62 +4,36 @@ import java.util.PriorityQueue;
 class Solution {
     public boolean solution(String[] phone_book) {
 
-        PriorityQueue<Node> aPrio = new PriorityQueue<Node>();
+        HashSet<String> [] arrOfHashSet = new HashSet[21];
 
         for(String phone: phone_book)
         {
-            aPrio.add(new Node(phone));
+            if(arrOfHashSet[phone.length()] == null)
+            {
+                arrOfHashSet[phone.length()] = new HashSet<String>();
+            }
+
+            arrOfHashSet[phone.length()].add(phone);
         }
 
-        HashSet<String>[] arrOfHashSet = new HashSet[21];
 
-        for(Node aNode: aPrio)
+        for(String phone: phone_book)
         {
-            String phone = aNode.tempString;
-            int length = phone.length();
-
-            for(int ind = 1; ind < length; ind++)
+            for(int index = 1; index < phone.length(); index++)
             {
-                HashSet<String> hashSet = arrOfHashSet[ind];
+                HashSet<String> temp = arrOfHashSet[index];
+                if( temp != null) {
+                    if (temp.contains(phone.substring(0, index)))
+                    {
 
-                if(hashSet != null) {
-                    if (hashSet.contains(phone.substring(0, ind))) {
-                        if(ind != length)
-                        {
-                            return false;
-                        }
-                        
+                        return false;
                     }
                 }
-
             }
-
-            if(arrOfHashSet[length] == null)
-            {
-                arrOfHashSet[length] = new HashSet<String>();
-            }
-
-            arrOfHashSet[length].add(phone);
         }
+
 
         return true;
     }
 
-}
-
-class Node implements Comparable<Node>
-{
-    int size;
-    String tempString;
-
-    public Node(String aString)
-    {
-        tempString = aString;
-        size = aString.length();
-    }
-
-    @Override
-    public int compareTo(Node o) {
-        return size - o.size;
-    }
 }
